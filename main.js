@@ -1,43 +1,61 @@
 let collectionCount = 0;
+let collected = [];
+let progress = document.getElementById('progress');
 
-document.addEventListener("DOMContentLoaded", function() {
-    // Check if there are collected cards in localStorage
-    const collectedCards = JSON.parse(localStorage.getItem("collectedCards")) || [];
 
-    if (collectedCards.length > 0) {
-        // Iterate through collected cards and collect each one
-        collectedCards.forEach(cardId => {
-            collect(cardId);
-        });
-    }
-});
+// Load the collection from localStorage on page load
+window.onload = function () {
+    loadCollection();
+    progress.style.width = ((collectionCount/139)* 100) + '%';
+};
 
 function collect(cardId) {
-    let collected = document.getElementById(cardId);
+    let card = document.getElementById(cardId);
 
-    if (collected && collected.classList.contains('uncollected')) {
-        collected.classList.remove('uncollected');
+    if (card.classList.contains('uncollected')) {
+        card.classList.replace('uncollected', 'collected');
         collectionCount++;
-        document.getElementById("count").innerHTML = collectionCount;
+        collected.push(cardId);
+    } else {
+        card.classList.replace('collected', 'uncollected');
+        collectionCount--;
 
-        // Store the collected cardId in localStorage
-        let collectedCards = JSON.parse(localStorage.getItem("collectedCards")) || [];
-        collectedCards.push(cardId);
-        localStorage.setItem("collectedCards", JSON.stringify(collectedCards));
+        let cardRemove = collected.indexOf(cardId);
+        if (cardRemove !== -1) {
+            collected.splice(cardRemove, 1);
+        }
     }
+    document.getElementById('count').innerHTML = collectionCount;
+    progress.style.width = ((collectionCount/139)* 100) + '%';
+
+    // Save the collection to localStorage
+    saveCollection();
 }
 
-function resetEverything() {
-    // Reset the collection count
-    collectionCount = 0;
-    document.getElementById("count").innerHTML = collectionCount;
+function saveCollection() {
+    let collectionData = {
+        count: collectionCount,
+        collected: collected,
+    };
 
-    // Reset the collected cards in localStorage
-    localStorage.removeItem("collectedCards");
+    localStorage.setItem('collectionData', JSON.stringify(collectionData));
+}
 
-    // Add the "uncollected" class to all cards
-    const uncollectedCards = document.querySelectorAll('.uncollected');
-    uncollectedCards.forEach(card => {
-        card.classList.add('uncollected');
-    });
+function loadCollection() {
+    let savedData = localStorage.getItem('collectionData');
+
+    if (savedData) {
+        let collectionData = JSON.parse(savedData);
+        collectionCount = collectionData.count;
+        collected = collectionData.collected;
+
+        document.getElementById('count').innerHTML = collectionCount;
+
+        for (let i = 0; i < collected.length; i++) {
+            let cardId = collected[i];
+            let card = document.getElementById(cardId);
+
+            card.classList.replace('uncollected', 'collected');
+        }
+    }
 }

@@ -2,3 +2,58 @@
     filter: grayscale(100%);
 }
 
+.collected{
+    filter: grayscale(0%);
+}
+
+body{
+    background-color: rgb(81, 81, 81);
+}
+
+.container{
+    margin-left: 15px;
+}
+
+.heading{
+    text-align: center;
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+  }
+
+  td {
+    max-width: 20%; /* Set the maximum width to 20% for 5 images per row */
+    display: inline-block;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 5px;
+    text-align: center;
+  }
+#progressBar{
+    height: 30px;
+    border: solid 1px grey;
+    background-color: aliceblue;
+    width: 75%;
+    margin: auto;
+    border-radius: 5px;
+}
+
+#progress{
+    background-color: greenyellow;
+    height: 100%;
+    width: 0%;
+    border-radius: 5px;
+}
+
+.counter{
+    color: white;
+    padding-bottom: 25px;
+    font-size: 20px;
+}
+
+h2{
+    color: white;
+    text-decoration: underline;
+}
